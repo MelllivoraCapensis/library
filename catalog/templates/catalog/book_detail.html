@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>
+		{{ book }}
+	</h1>
+	<p>
+		(
+		{{ book.year }}
+		
+		)
+	</p>
+	<p>
+		<a href="{% url 'author_detail' pk=book.author.pk %}">
+			{{ book.author }}
+		</a>
+	</p>
+	<p>
+		{{ book.description }}
+	</p>
+	<p>
+		<a href="{% url 'book_update' pk=book.pk %}">
+			Редактировать
+		</a>
+		<a href="{% url 'book_delete' pk=book.pk %}">
+			Удалить
+		</a>
+	</p>
+{% endblock content %}

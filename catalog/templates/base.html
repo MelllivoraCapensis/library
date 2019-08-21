@@ -9,10 +9,19 @@
 	</title>
 </head>
 <body>
+	{% block navigation %}
+		<nav>
+			<a href="/admin">Admin</a>
+			<a href="{% url 'authors_list' %}">Authors</a>
+			<a href="{% url 'books_list' %}">Books</a>
+		</nav>
+	{% endblock navigation %}
 	{% block content %}
 		<h1>Library Site</h1>
 		
+		
 	{% endblock content %}
+
 	
 </body>
 </html>

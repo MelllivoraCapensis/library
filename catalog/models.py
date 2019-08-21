@@ -18,6 +18,21 @@ class Author(models.Model):
 	def __str__(self):
 		return f'{self.last_name}, {self.first_name}'
 
+class Book(models.Model):
+	title = models.CharField(max_length = 100)
+	year = models.IntegerField()
+	author = models.ForeignKey(Author, on_delete = models.SET_NULL, 
+		null = True, blank = True)
+	description = models.TextField()
+
+	class Meta:
+		ordering: ['title']
+
+	def get_absolute_url(self):
+		return reverse('book_detail', args = [str(self.id)])
+
+	def __str__(self):
+		return f'{ self.title }'
 
 
 
