@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>
+		{{ author }}
+	</h1>
+	<p>
+		(
+		{{ author.date_of_birth }} - 
+		{% if author.date_of_death %}
+			{{ author.date_of_death }}
+		{% else %}
+			наши дни
+		{% endif %}
+		)
+	</p>
+	<p>
+		{{ author.biography }}
+	</p>
+	<p>
+		<a href="{% url 'author_update' pk=author.pk %}">
+			Редактировать
+		</a>
+		<a href="{% url 'author_delete' pk=author.pk %}">
+			Удалить
+		</a>
+	</p>
+{% endblock content %}
