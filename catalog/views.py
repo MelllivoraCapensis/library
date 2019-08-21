@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView
-
-from .models import Author, Book
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
+from .models import Author, Book, Reader
 
 class AuthorCreateWithList(CreateView):
 	model = Author
@@ -46,3 +47,18 @@ class BookUpdate(UpdateView):
 class BookDelete(DeleteView):
 	model = Book
 	success_url = reverse_lazy('books_list')
+
+def reader_create_with_list(request):
+	readers = Reader.objects.all()
+	if request.method == 'POST':
+		f = UserCreationForm(request.POST)
+		if f.is_valid():
+			new_user = f.save()
+			readers_group = Group.objects.get(name = 'readers')
+			new_user.groups.add(readers_group)
+			new_user.save()
+			Reader.objects.create(user = new_user)
+			return redirect('login')
+	else:
+		f = UserCreationForm()
+	return render(request, 'catalog/readers_list.html', {'form': f, 'readers': readers})

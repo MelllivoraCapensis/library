@@ -20,5 +20,6 @@ from django.shortcuts import redirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
-    path('', lambda request: redirect('catalog/users/', permanent = True)),
+    path('', lambda request: redirect('catalog/readers/', permanent = True), name = 'home'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

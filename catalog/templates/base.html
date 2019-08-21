@@ -10,10 +10,21 @@
 </head>
 <body>
 	{% block navigation %}
+		<p>
+			{% if user.is_authenticated %}
+				hello, {{ user }}
+			{% endif %}
+		</p>
 		<nav>
+			<a href="{% url 'home' %}">Home</a>
 			<a href="/admin">Admin</a>
 			<a href="{% url 'authors_list' %}">Authors</a>
 			<a href="{% url 'books_list' %}">Books</a>
+			{% if user.is_authenticated %}
+				<a href="{% url 'logout' %}">Log out</a>
+			{% else %}
+				<a href="{% url 'login' %}">Log in</a>
+			{% endif %}			
 		</nav>
 	{% endblock navigation %}
 	{% block content %}

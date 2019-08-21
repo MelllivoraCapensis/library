@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 class Author(models.Model):
@@ -34,5 +36,12 @@ class Book(models.Model):
 	def __str__(self):
 		return f'{ self.title }'
 
+class Reader(models.Model):
+	user = models.OneToOneField(User, on_delete = models.CASCADE)
+	books = models.ManyToManyField(Book)
 
+	def get_books(self):
+		return "; ".join([b.title for b in self.books.all()])
 
+	def __str__(self):
+		return f'{ self.user.username }'
