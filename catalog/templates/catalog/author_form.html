@@ -11,10 +11,13 @@
 		</li>
 	{% endfor %}
 	</ul>
-	<h3>Add New Author</h3>
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button>Add</button>
-	</form>
+	{% if perms.catalog.add_author %}
+		<h3>Add New Author</h3>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button>Add</button>
+		</form>
+	{% endif %}
+	
 {% endblock content %}

@@ -17,12 +17,14 @@
 	<p>
 		{{ author.biography }}
 	</p>
-	<p>
-		<a href="{% url 'author_update' pk=author.pk %}">
-			Редактировать
-		</a>
-		<a href="{% url 'author_delete' pk=author.pk %}">
-			Удалить
-		</a>
-	</p>
+	{% if perms.catalog.change_author %}
+		<p>
+			<a href="{% url 'author_update' pk=author.pk %}">
+				Редактировать
+			</a>
+			<a href="{% url 'author_delete' pk=author.pk %}">
+				Удалить
+			</a>
+		</p>
+	{% endif %}
 {% endblock content %}

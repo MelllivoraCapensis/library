@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Books of user {{ reader }}</h2>
+	<ul>
+		{% for reader_book in reader_books %}
+			<li>
+				<a href="{{ reader_book.get_absolute_url }}">
+					{{ reader_book }}
+				</a>
+				<a href="{% url 'book_delete_from_reader_list' reader_id=reader.id book_id=reader_book.id %}"> delete </a>
+			</li>
+		{% endfor %}
+	</ul>
+	<h2>Recommended books</h2>
+	<form method="post">
+		{% csrf_token %}
+		{% for recommended_book in recommended_books %}
+			<li>
+				<label>
+					Выбрать {{ recommended_book }}
+					<input type="checkbox" name="book_id_{{ recommended_book.id }}">
+				</label>
+			</li>
+		{% endfor %}
+		<button>Добавить</button>
+	</form>
+{% endblock content %}

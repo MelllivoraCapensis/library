@@ -5,6 +5,7 @@ from django.views.generic import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
 from .models import Author, Book, Reader
+from django import forms
 
 class AuthorCreateWithList(CreateView):
 	model = Author
@@ -62,3 +63,27 @@ def reader_create_with_list(request):
 	else:
 		f = UserCreationForm()
 	return render(request, 'catalog/readers_list.html', {'form': f, 'readers': readers})
+
+def reader_detail(request, id):
+	reader = Reader.objects.get(id__exact = id)
+	user_id = reader.user.id
+
+	if request.method == 'POST':
+		for item in dict(request.POST):
+			if 'book_id_' in item:
+				book = Book.objects.get(id__exact = item[8:])
+				reader.books.add(book)
+
+	reader_books = reader.books.all()
+	reader_book_ids = list([book.id for book in reader_books])
+	recommended_books = Book.objects.all().exclude(id__in = reader_book_ids)
+
+	return render(request, 'catalog/reader_detail.html', 
+		{'user_id': user_id, 'reader_books': reader_books, 
+		'recommended_books': recommended_books, 'reader': reader})
+
+def book_delete_from_reader_list(request, reader_id, book_id):
+	reader = Reader.objects.get(id = reader_id)
+	book_to_delete = Book.objects.get(id__exact = book_id)
+	reader.books.remove(book_to_delete)
+	return redirect(reader.get_absolute_url())

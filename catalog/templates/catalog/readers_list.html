@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 
 {% block title %}
-	List of Users
+	List of readers
 {% endblock title %}
 
 {% block content %}
 	<h1>List of Readers</h1>
 	{% for reader in readers %}
 		<li>
-			{{ reader }}
+			<a href="{{ reader.get_absolute_url }}">
+				{{ reader }}
+			</a>
 		</li>
 	{% endfor %}
 	<h2>Register New Reader</h2>	
 	<form method="post">
 		{% csrf_token %}
 		{{ form.as_ul }}
-		<button>Register</button>
+		<button>
+			Register
+		</button>
 	</form>
 {% endblock content %}

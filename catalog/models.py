@@ -45,3 +45,6 @@ class Reader(models.Model):
 
 	def __str__(self):
 		return f'{ self.user.username }'
+
+	def get_absolute_url(self):
+		return reverse('reader_detail', args = [str(self.id)])
