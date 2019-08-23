@@ -5,12 +5,6 @@
 		{{ book }}
 	</h1>
 	<p>
-		(
-		{{ book.year }}
-		
-		)
-	</p>
-	<p>
 		<a href="{% url 'author_detail' pk=book.author.pk %}">
 			{{ book.author }}
 		</a>
@@ -20,21 +14,16 @@
 	</p>
 	<p>
 		{% if perms.catalog.add_book %}
-			<a href="{% url 'book_update' pk=book.pk %}">
-			Редактировать
-			</a>
-			<a href="{% url 'book_delete' pk=book.pk %}">
-				Удалить
-			</a>
+			{% include "catalog/detail_item_bar.html" with book=book delete_view_name='book_delete' update_view_name='book_update' %}
 		{% endif %}
 	</p>
 	{% if user_is_reader %}
 		{% if book_in_reader_list %}
-			<a href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Delete from list
+			<a class="d-block btn-info p-2 w-100 text-center not-underline" href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Удалить из моего списка
 			</a>
 		{% else %}
-			<a href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
-			Add to list
+			<a class="d-block btn-danger p-2 w-100 not-underline text-center" href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
+			Добавить в мой список
 			</a>
 		{% endif %}
 	{% endif %}

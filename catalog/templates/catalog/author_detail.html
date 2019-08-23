@@ -18,13 +18,6 @@
 		{{ author.biography }}
 	</p>
 	{% if perms.catalog.change_author %}
-		<p>
-			<a href="{% url 'author_update' pk=author.pk %}">
-				Редактировать
-			</a>
-			<a href="{% url 'author_delete' pk=author.pk %}">
-				Удалить
-			</a>
-		</p>
+		{% include "catalog/detail_item_bar.html" with object=author update_view_name='author_update' delete_view_name='author_delete' %}
 	{% endif %}
 {% endblock content %}

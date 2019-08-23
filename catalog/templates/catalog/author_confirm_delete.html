@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-	 <h2>Вы уверены что хотите удалить {{ author }} ?</h2>
-	 <form method="post">
-	 	{% csrf_token %}
-	 	<button>Да</button>
-	 </form>
-	 <a href="{% url 'author_detail' pk=author.pk %}">Нет</a>
+	 {% include "catalog/item_confirm_delete.html" with item=author item_list='authors_list' %}
 {% endblock content %}

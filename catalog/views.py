@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
 from .models import Author, Book, Reader
 from django import forms
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 class AuthorCreateWithList(CreateView):
 	model = Author
@@ -21,11 +22,14 @@ class AuthorCreateWithList(CreateView):
 class AuthorDetail(DetailView):
 	model = Author
 
-class AuthorUpdate(UpdateView):
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+	permission_required = 'catalog.change_author'
 	model = Author
 	fields = '__all__'
+	template_name_suffix = '_update_form'
 
-class AuthorDelete(DeleteView):
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+	permission_required = 'catalog.delete_author'
 	model = Author
 	success_url = reverse_lazy('authors_list')
 
@@ -51,11 +55,14 @@ class BookDetail(DetailView):
 				kwargs['book_in_reader_list'] = True
 		return super(DetailView, self).get_context_data(**kwargs)
 
-class BookUpdate(UpdateView):
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+	permission_required = 'catalog.change_book'
 	model = Book
 	fields = '__all__'
+	template_name_suffix = '_update_form'
 
-class BookDelete(DeleteView):
+class BookDelete(PermissionRequiredMixin, DeleteView):
+	permission_required = 'catalog.delete_book'
 	model = Book
 	success_url = reverse_lazy('books_list')
 
@@ -72,7 +79,7 @@ def reader_create_with_list(request):
 			return redirect('login')
 	else:
 		f = UserCreationForm()
-	return render(request, 'catalog/readers_list.html', {'form': f, 'readers': readers})
+	return render(request, 'catalog/readers_list.html', {'register_reader_form': f, 'readers': readers})
 
 def reader_detail(request, id):
 	reader = Reader.objects.get(id__exact = id)

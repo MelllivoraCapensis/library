@@ -1,0 +1,8 @@
+<div class="d-flex justify-content-between">
+	<a class="w-75 btn-dark p-2 text-center not-underline" href="{% url update_view_name pk=object.pk %}">
+		Редактировать
+	</a>
+	<a class="w-25 btn-danger p-2 text-center not-underline" href="{% url delete_view_name pk=object.pk %}">
+		Удалить
+	</a>
+</div>

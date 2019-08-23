@@ -1,0 +1,8 @@
+<h2>Вы уверены что хотите удалить {{ item }} ?</h2>
+<div class="d-flex align-content-between">
+	<form class="w-75" method="post">
+		{% csrf_token %}
+		<button class="d-block w-100 btn-danger border-0">Да</button>
+	</form>
+	<a class="d-block w-25 bg-dark text-light text-center not-underline" href="{% url 'books_list' %}">Нет</a>
+</div>

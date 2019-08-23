@@ -127,3 +127,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home')
 TEMPLATE_CONTEXT_PROCESSORS = [
     'catalog.views.get_current_path',    
 ]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

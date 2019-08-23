@@ -1,22 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>Все книги</h1>
-	<ul class="list-group list-group-flush">
-	{% for book in books %}
-		<li class="list-group-item">
-			<a href="{{ book.get_absolute_url }}">
-				{{ book }}
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
+	<h1 class="mb-5">Все книги</h1>
+	{% include "catalog/item_list.html" with items=books delete_view_name='book_delete' update_view_name='book_update' perm_to_update=perms.catalog.change_book perm_to_delete=perms.catalog.delete_book %}
 	{% if perms.catalog.add_book %}
-		<h3>Add New Book</h3>
-		<form method="post">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<button>Add</button>
-		</form>
+		<h3 class="mb-5">Добавить новую книгу</h3>
+		{% include "catalog/form.html" with form=form submit_value="Добавить" %}
 	{% endif %}
 {% endblock content %}

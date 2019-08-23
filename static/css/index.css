@@ -1,0 +1,23 @@
+.tooltip-inner {
+	max-width: 350px;
+}
+
+a.not-underline {
+	text-decoration: none;
+}
+
+.container {
+	max-width: 1000px;
+}
+
+.nav-menu {
+	height: auto;
+	align-self: flex-start;
+
+	padding: 0;
+}
+
+.nav-menu li:hover {
+	outline: 1px dotted blue;
+	box-sizing: border-box;
+}

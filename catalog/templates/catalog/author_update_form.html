@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2 class="mb-5">Редактировать запись об авторе</h2>
+	{% include "catalog/form.html" with form=form submit_value="Сохранить изменения" %}
+{% endblock content %}

@@ -1,32 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Books of user {{ reader }}</h2>
-	<ul>
+	<h2 class="mb-5">Книги пользователя <span class="text-info"> {{ reader }} </span></h2>
+	<ul class="list-group mb-5">
 		{% for reader_book in reader_books %}
-			<li>
-				<a href="{{ reader_book.get_absolute_url }}">
+			<li class="w-100 d-flex p-0 list-group-item align-content-between">
+				<a class="d-block p-2 not-underline text-light bg-info flex-grow-1" href="{{ reader_book.get_absolute_url }}">
 					{{ reader_book }}
 				</a>
 				{% if user.id == reader.user.id %}
-					<a href="{% url 'book_delete_from_reader_list' reader_id=reader.id book_id=reader_book.id %}"> delete</a>
+					<a class="d-block w-25 bg-danger p-2 text-center text-light not-underline" href="{% url 'book_delete_from_reader_list' reader_id=reader.id book_id=reader_book.id %}">Убрать из списка</a>
 				{% endif %}
 			</li>
 		{% endfor %}
 	</ul>
-	{% if user.id == reader.user.id %}
-		<h2>Recommended books</h2>
+	{% if user.id == reader.user.id and recommended_books %}
+		<h2 class="mb-5">Рекомендуемые книги</h2>
 		<form method="post">
 			{% csrf_token %}
+			<ul class="list-group-flush mb-5">
 			{% for recommended_book in recommended_books %}
-				<li>
-					<label>
-						Выбрать {{ recommended_book }}
-						<input type="checkbox" name="book_id_{{ recommended_book.id }}">
+				<li class="list-group-item p-0">
+					<label class="d-flex align-content-between">
+						<a href="{{ recommended_book.get_absolute_url }}" class="d-block p-2 text-left flex-grow-1 not-underline m-0">
+							{{ recommended_book }}
+						</a>
+						<div class="d-block p-2 text-right">
+							Выбрать
+							<input type="checkbox" name="book_id_{{ recommended_book.id }}">
+						</div>
 					</label>
 				</li>
 			{% endfor %}
-			<button>Добавить</button>
+			<button class="btn-info w-100 p-2 border-0">Добавить</button>
 		</form>
 	{% endif %}
 {% endblock content %}

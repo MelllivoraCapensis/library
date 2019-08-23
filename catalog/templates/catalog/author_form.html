@@ -1,23 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>Все авторы</h1>
-	<ul class="list-group list-group-flush">
-	{% for author in authors %}
-		<li class="list-group-item">
-			<a href="{{ author.get_absolute_url }}">
-				{{ author }}
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
+	<h1 class="mb-5">Все авторы</h1>
+	{% include "catalog/item_list.html" with items=authors update_view_name='author_update' delete_view_name='author_delete' perm_to_delete=perms.catalog.delete_author perm_to_update=perms.catalog.change_author %}
 	{% if perms.catalog.add_author %}
-		<h3>Add New Author</h3>
-		<form method="post">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<button>Add</button>
-		</form>
+		<h3 class="mb-5">Добавить автора</h3>
+		{% include "catalog/form.html"  with form=form submit_value='Добавить'%}
 	{% endif %}
 	
 {% endblock content %}

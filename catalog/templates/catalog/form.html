@@ -1,0 +1,26 @@
+<form class="mb-5" method="post">
+		{% csrf_token %}
+		{% for field in form %}
+			<div class="form-group">
+				<ul class="list-group">
+					{% for error in field.errors %}
+						<li class="list-group-item text-danger">
+							{{ error }}
+						</li>
+					{% endfor %}
+				</ul>
+				
+				<div class="d-flex justify-content-between">
+					<label for="id_{{ field.name }}">
+						{{ field.label }}
+						<span class="badge-info p-1" data-togle="tooltip" data-html="true" data-placement="bottom" data-original-title="{{ field.help_text }}">?</span>
+					</label>
+					{{ field }}
+
+				</div>
+			</div>
+		{% endfor %}		
+		<button class="btn-block p-2 border-0 bg-info text-light">
+     			{{ submit_value }}
+		</button>
+	</form>
