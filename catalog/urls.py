@@ -14,4 +14,6 @@ urlpatterns = [
 	path('reader/<int:id>/', views.reader_detail, name = 'reader_detail'),
 	path('reader/<int:reader_id>/book/<int:book_id>/delete/',
 		views.book_delete_from_reader_list, name = 'book_delete_from_reader_list'),
+	path('reader/<int:reader_id>/book/<int:book_id>/add/',
+		views.book_add_to_reader_list, name = 'book_add_to_reader_list')
 ]

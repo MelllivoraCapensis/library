@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>List of books</h1>
-	<ul>
+	<h1>Все книги</h1>
+	<ul class="list-group list-group-flush">
 	{% for book in books %}
-		<li>
+		<li class="list-group-item">
 			<a href="{{ book.get_absolute_url }}">
 				{{ book }}
 			</a>
 		</li>
 	{% endfor %}
 	</ul>
-	<h3>Add New Book</h3>
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button>Add</button>
-	</form>
+	{% if perms.catalog.add_book %}
+		<h3>Add New Book</h3>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button>Add</button>
+		</form>
+	{% endif %}
 {% endblock content %}

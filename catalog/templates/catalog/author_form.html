@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>List of authors</h1>
-	<ul>
+	<h1>Все авторы</h1>
+	<ul class="list-group list-group-flush">
 	{% for author in authors %}
-		<li>
+		<li class="list-group-item">
 			<a href="{{ author.get_absolute_url }}">
 				{{ author }}
 			</a>

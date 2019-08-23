@@ -1,23 +1,40 @@
 {% extends "base.html" %}
 
 {% block title %}
-	List of readers
+	Все читатели библиотеки
 {% endblock title %}
 
 {% block content %}
-	<h1>List of Readers</h1>
-	{% for reader in readers %}
-		<li>
-			<a href="{{ reader.get_absolute_url }}">
-				{{ reader }}
-			</a>
-		</li>
-	{% endfor %}
-	<h2>Register New Reader</h2>	
+	<h1 class="mb-4">Все читатели</h1>
+	<ul class="list-group list-group-flush mb-5">
+		{% for reader in readers %}
+			<li class="list-group-item">
+				<a href="{{ reader.get_absolute_url }}">
+					{{ reader }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+	<h2>Зарегистрироваться</h2>	
 	<form method="post">
 		{% csrf_token %}
-		{{ form.as_ul }}
-		<button>
+		{% for field in form %}
+			<div class="form-group">
+				<ul class="list-group">
+					{% for error in field.errors %}
+						<li class="list-group-item text-danger">
+							{{ error }}
+						</li>
+					{% endfor %}
+				</ul>
+				
+				<p class="d-flex justify-content-between">
+					{{ field.label }}
+					{{ field }}
+				</p>
+			</div>
+		{% endfor %}		
+		<button class="btn-block p-2 border-0 bg-faded">
 			Register
 		</button>
 	</form>

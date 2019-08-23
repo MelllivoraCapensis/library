@@ -19,11 +19,23 @@
 		{{ book.description }}
 	</p>
 	<p>
-		<a href="{% url 'book_update' pk=book.pk %}">
+		{% if perms.catalog.add_book %}
+			<a href="{% url 'book_update' pk=book.pk %}">
 			Редактировать
-		</a>
-		<a href="{% url 'book_delete' pk=book.pk %}">
-			Удалить
-		</a>
+			</a>
+			<a href="{% url 'book_delete' pk=book.pk %}">
+				Удалить
+			</a>
+		{% endif %}
 	</p>
+	{% if user_is_reader %}
+		{% if book_in_reader_list %}
+			<a href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Delete from list
+			</a>
+		{% else %}
+			<a href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
+			Add to list
+			</a>
+		{% endif %}
+	{% endif %}
 {% endblock content %}

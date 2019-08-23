@@ -123,3 +123,7 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
+
+TEMPLATE_CONTEXT_PROCESSORS = [
+    'catalog.views.get_current_path',    
+]

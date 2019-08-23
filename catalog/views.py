@@ -41,6 +41,16 @@ class BookCreateWithList(CreateView):
 class BookDetail(DetailView):
 	model = Book
 
+	def get_context_data(self, **kwargs):
+		user = self.request.user
+		# user_groups = list(user.groups.values_list('name', flat = True))
+		if hasattr(user, 'reader'):
+			kwargs['user_is_reader'] = True
+			user_book_ids = list([book.id for book in user.reader.books.all()])
+			if self.get_object().id in user_book_ids:
+				kwargs['book_in_reader_list'] = True
+		return super(DetailView, self).get_context_data(**kwargs)
+
 class BookUpdate(UpdateView):
 	model = Book
 	fields = '__all__'
@@ -66,7 +76,6 @@ def reader_create_with_list(request):
 
 def reader_detail(request, id):
 	reader = Reader.objects.get(id__exact = id)
-	user_id = reader.user.id
 
 	if request.method == 'POST':
 		for item in dict(request.POST):
@@ -79,7 +88,7 @@ def reader_detail(request, id):
 	recommended_books = Book.objects.all().exclude(id__in = reader_book_ids)
 
 	return render(request, 'catalog/reader_detail.html', 
-		{'user_id': user_id, 'reader_books': reader_books, 
+		{'reader_books': reader_books, 
 		'recommended_books': recommended_books, 'reader': reader})
 
 def book_delete_from_reader_list(request, reader_id, book_id):
@@ -87,3 +96,14 @@ def book_delete_from_reader_list(request, reader_id, book_id):
 	book_to_delete = Book.objects.get(id__exact = book_id)
 	reader.books.remove(book_to_delete)
 	return redirect(reader.get_absolute_url())
+
+def book_add_to_reader_list(request, reader_id, book_id):
+	reader = Reader.objects.get(id = reader_id)
+	book_to_add = Book.objects.get(id__exact = book_id)
+	reader.books.add(book_to_add)
+	return redirect(reader.get_absolute_url())
+
+def get_current_path(request):
+	return {
+		'current_path': request.get_full_path()
+	}
