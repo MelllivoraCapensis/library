@@ -1,23 +1,31 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
 from .models import Author, Book, Reader
 from django import forms
+from .forms import AuthorForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-class AuthorCreateWithList(CreateView):
-	model = Author
-	fields = '__all__'
+# class AuthorCreateWithList(CreateView):
+# 	model = Author
+# 	fields = '__all__'
 
-	success_url = './'
+# 	success_url = './'
+
+# 	def get_context_data(self, **kwargs):
+# 		kwargs['authors'] = Author.objects.all()
+# 		return super(CreateView, self).get_context_data(**kwargs)
+
+
+class AuthorList(ListView):
+	model = Author
 
 	def get_context_data(self, **kwargs):
-		kwargs['authors'] = Author.objects.all()
-		return super(CreateView, self).get_context_data(**kwargs)
-
+		kwargs['form'] = AuthorForm()
+		return super(ListView, self).get_context_data(**kwargs)
 
 class AuthorDetail(DetailView):
 	model = Author
@@ -25,7 +33,7 @@ class AuthorDetail(DetailView):
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
 	permission_required = 'catalog.change_author'
 	model = Author
-	fields = '__all__'
+	form_class = AuthorForm
 	template_name_suffix = '_update_form'
 
 class AuthorDelete(PermissionRequiredMixin, DeleteView):

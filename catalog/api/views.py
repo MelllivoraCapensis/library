@@ -14,10 +14,10 @@ def authors_list(request):
 		authors = Author.objects.all()
 		serializer = AuthorSerializer(authors, many = True)
 		return Response(serializer.data)
+
 	elif request.method == 'POST':
 		if not request.user.has_perm('catalog.add_author'):
 			return Response(data = 'У вас нет прав для данной операции', status = status.HTTP_403_FORBIDDEN)
-
 		serializer = AuthorSerializer(data = request.data)
 		if serializer.is_valid():
 			serializer.save()
@@ -54,6 +54,7 @@ def books_list(request):
 		books = Book.objects.all()
 		serializer = BookSerializer(books, many = True)
 		return Response(serializer.data)
+		
 	elif request.method == 'POST':
 		if not request.user.has_perm('catalog.add_book'):
 			return Response(data = 'У вас нет прав для данной операции', status = status.HTTP_403_FORBIDDEN)
@@ -86,6 +87,4 @@ def book_detail(request, id):
 			return Response(status = status.HTTP_403_FORBIDDEN)
 		book.delete()
 		return Response(status = status.HTTP_204_NO_CONTENT)
-
-
 

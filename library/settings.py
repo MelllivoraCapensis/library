@@ -26,7 +26,7 @@ SECRET_KEY = '8=0j^gr=21oa&d)u5_#8xl8k8yeeona#3e!%qqs2%sn0zdwl2w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver', 'localhost']
 
 
 # Application definition
@@ -124,8 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGOUT_REDIRECT_URL = reverse_lazy('home')
+LOGIN_REDIRECT_URL = reverse_lazy('readers_list')
+LOGOUT_REDIRECT_URL = reverse_lazy('readers_list')
 
 TEMPLATE_CONTEXT_PROCESSORS = [
     'catalog.views.get_current_path',    

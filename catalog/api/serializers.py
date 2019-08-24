@@ -1,12 +1,17 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from ..models import Author, Book
 
-class AuthorSerializer(ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Author
 		fields = '__all__'
 
-class BookSerializer(ModelSerializer):
+	def validate(self, data):
+		if data['date_of_death'] < data['date_of_birth']:
+			raise serializers.ValidationError('Дата смерти не может быть раньше даты рождения')
+		return data
+
+class BookSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Author
+		model = Book
 		fields = '__all__'
