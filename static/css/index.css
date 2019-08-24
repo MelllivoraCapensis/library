@@ -21,3 +21,15 @@ a.not-underline {
 	outline: 1px dotted blue;
 	box-sizing: border-box;
 }
+
+.closer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	
+	display: block;
+	width: 20px;
+	height: 20px;
+
+	cursor: pointer;
+}

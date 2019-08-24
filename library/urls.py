@@ -22,4 +22,5 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('', lambda request: redirect('catalog/readers/', permanent = True), name = 'home'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('api/', include('catalog.api.urls')),
 ]

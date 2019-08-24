@@ -2,6 +2,9 @@
 
 {% block content %}
 	<h2 class="mb-5">Книги пользователя <span class="text-info"> {{ reader }} </span></h2>
+	{% if reader.books.count == 0 %}
+		<p>Пока нет ни одной книги ...</p>
+	{% endif %}
 	<ul class="list-group mb-5">
 		{% for reader_book in reader_books %}
 			<li class="w-100 d-flex p-0 list-group-item align-content-between">
@@ -22,10 +25,10 @@
 			{% for recommended_book in recommended_books %}
 				<li class="list-group-item p-0">
 					<label class="d-flex align-content-between">
-						<a href="{{ recommended_book.get_absolute_url }}" class="d-block p-2 text-left flex-grow-1 not-underline m-0">
+						<a href="{{ recommended_book.get_absolute_url }}" class="d-block p-2 text-left not-underline m-0">
 							{{ recommended_book }}
 						</a>
-						<div class="d-block p-2 text-right">
+						<div class="d-block p-2 text-right flex-grow-1">
 							Выбрать
 							<input type="checkbox" name="book_id_{{ recommended_book.id }}">
 						</div>
