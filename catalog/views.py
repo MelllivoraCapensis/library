@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
 from .models import Author, Book, Reader
 from django import forms
-from .forms import AuthorForm
+from .forms import AuthorForm, BookForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # class AuthorCreateWithList(CreateView):
@@ -24,7 +24,8 @@ class AuthorList(ListView):
 	model = Author
 
 	def get_context_data(self, **kwargs):
-		kwargs['form'] = AuthorForm()
+		if self.request.user.has_perm('catalog.add_author'):
+			kwargs['form'] = AuthorForm()
 		return super(ListView, self).get_context_data(**kwargs)
 
 class AuthorDetail(DetailView):
@@ -41,14 +42,15 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 	model = Author
 	success_url = reverse_lazy('authors_list')
 
-class BookCreateWithList(CreateView):
+class BookList(ListView):
 	model = Book
 	fields = '__all__'
 	success_url = './'
 
 	def get_context_data(self, **kwargs):
-		kwargs['books'] = Book.objects.all()
-		return super(CreateView, self).get_context_data(**kwargs)
+		if self.request.user.has_perm('catalog.add_book'):
+			kwargs['form'] = BookForm()
+		return super(ListView, self).get_context_data(**kwargs)
 
 class BookDetail(DetailView):
 	model = Book

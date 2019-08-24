@@ -2,7 +2,7 @@
 
 {% block content %}
 	<h1 class="mb-5">Все книги</h1>
-	{% include "catalog/item_list.html" with items=books delete_view_name='book_delete' update_view_name='book_update' perm_to_update=perms.catalog.change_book perm_to_delete=perms.catalog.delete_book %}
+	{% include "catalog/item_list.html" with items=book_list delete_view_name='book_delete' update_view_name='book_update' perm_to_update=perms.catalog.change_book perm_to_delete=perms.catalog.delete_book %}
 	{% if perms.catalog.add_book %}
 		<h3 class="mb-5">Добавить новую книгу</h3>
 		{% include "catalog/form.html" with form=form submit_value="Добавить" %}
