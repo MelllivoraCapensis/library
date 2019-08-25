@@ -9,7 +9,7 @@ from rest_framework import generics
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 @api_view(['GET', 'POST'])
-def authors_list(request):
+def author_list(request):
 	if request.method == 'GET':
 		authors = Author.objects.all()
 		serializer = AuthorSerializer(authors, many = True)
@@ -49,7 +49,8 @@ def author_detail(request, id):
 
 
 @api_view(['GET', 'POST'])
-def books_list(request):
+def book_list(request):
+
 	if request.method == 'GET':
 		books = Book.objects.all()
 		serializer = BookSerializer(books, many = True)
@@ -59,7 +60,8 @@ def books_list(request):
 		if not request.user.has_perm('catalog.add_book'):
 			return Response(data = 'У вас нет прав для данной операции', status = status.HTTP_403_FORBIDDEN)
 
-		serializer = AuthorSerializer(data = request.data)
+		serializer = BookSerializer(data = request.data)
+
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status = status.HTTP_201_CREATED)

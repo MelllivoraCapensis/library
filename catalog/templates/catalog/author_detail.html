@@ -17,6 +17,8 @@
 	<p>
 		{{ author.biography }}
 	</p>
+	<h4 class="mb-3">Все книги автора</h4>
+	{% include "catalog/item_list.html" with items=author.book_set.all %}
 	{% if perms.catalog.change_author %}
 		{% include "catalog/detail_item_bar.html" with object=author update_view_name='author_update' delete_view_name='author_delete' %}
 	{% endif %}

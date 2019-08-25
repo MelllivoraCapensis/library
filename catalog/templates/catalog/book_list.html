@@ -1,10 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 	<h1 class="mb-5">Все книги</h1>
+
 	{% include "catalog/item_list.html" with items=book_list delete_view_name='book_delete' update_view_name='book_update' perm_to_update=perms.catalog.change_book perm_to_delete=perms.catalog.delete_book %}
-	{% if perms.catalog.add_book %}
+
+	{% if form %}
+
 		<h3 class="mb-5">Добавить новую книгу</h3>
-		{% include "catalog/form.html" with form=form submit_value="Добавить" %}
+		{% include "catalog/form.html" with form=form submit_value="Добавить" form_id="add_book_form" %}
+
 	{% endif %}
+
 {% endblock content %}
+
+{% block scripts %}
+	{% if form %}
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+		<script src="{% static 'js/add_book.js' %}"></script>
+	{% endif %}
+{% endblock scripts %}

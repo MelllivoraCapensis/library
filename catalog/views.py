@@ -9,17 +9,6 @@ from django import forms
 from .forms import AuthorForm, BookForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-# class AuthorCreateWithList(CreateView):
-# 	model = Author
-# 	fields = '__all__'
-
-# 	success_url = './'
-
-# 	def get_context_data(self, **kwargs):
-# 		kwargs['authors'] = Author.objects.all()
-# 		return super(CreateView, self).get_context_data(**kwargs)
-
-
 class AuthorList(ListView):
 	model = Author
 
@@ -44,8 +33,6 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class BookList(ListView):
 	model = Book
-	fields = '__all__'
-	success_url = './'
 
 	def get_context_data(self, **kwargs):
 		if self.request.user.has_perm('catalog.add_book'):
@@ -57,7 +44,6 @@ class BookDetail(DetailView):
 
 	def get_context_data(self, **kwargs):
 		user = self.request.user
-		# user_groups = list(user.groups.values_list('name', flat = True))
 		if hasattr(user, 'reader'):
 			kwargs['user_is_reader'] = True
 			user_book_ids = list([book.id for book in user.reader.books.all()])
@@ -68,7 +54,7 @@ class BookDetail(DetailView):
 class BookUpdate(PermissionRequiredMixin, UpdateView):
 	permission_required = 'catalog.change_book'
 	model = Book
-	fields = '__all__'
+	form_class = BookForm
 	template_name_suffix = '_update_form'
 
 class BookDelete(PermissionRequiredMixin, DeleteView):
@@ -77,7 +63,8 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
 	success_url = reverse_lazy('books_list')
 
 def reader_create_with_list(request):
-	readers = Reader.objects.all()
+	context_data = {}
+	context_data['readers'] = Reader.objects.all()
 	if request.method == 'POST':
 		f = UserCreationForm(request.POST)
 		if f.is_valid():
@@ -87,9 +74,9 @@ def reader_create_with_list(request):
 			new_user.save()
 			Reader.objects.create(user = new_user)
 			return redirect('login')
-	else:
-		f = UserCreationForm()
-	return render(request, 'catalog/readers_list.html', {'register_reader_form': f, 'readers': readers})
+	elif not request.user.is_authenticated:
+		context_data['register_reader_form'] = UserCreationForm()
+	return render(request, 'catalog/reader_list.html', context_data)
 
 def reader_detail(request, id):
 	reader = Reader.objects.get(id__exact = id)
@@ -97,16 +84,12 @@ def reader_detail(request, id):
 	if request.method == 'POST':
 		for item in dict(request.POST):
 			if 'book_id_' in item:
-				book = Book.objects.get(id__exact = item[8:])
+				prefix_length = len('book_id')
+				book = Book.objects.get(id__exact = item[prefix_length + 1:])
 				reader.books.add(book)
 
-	reader_books = reader.books.all()
-	reader_book_ids = list([book.id for book in reader_books])
-	recommended_books = Book.objects.all().exclude(id__in = reader_book_ids)
-
 	return render(request, 'catalog/reader_detail.html', 
-		{'reader_books': reader_books, 
-		'recommended_books': recommended_books, 'reader': reader})
+		{'reader': reader, 'other_books': reader.get_other_books()})
 
 def book_delete_from_reader_list(request, reader_id, book_id):
 	reader = Reader.objects.get(id = reader_id)
@@ -119,8 +102,3 @@ def book_add_to_reader_list(request, reader_id, book_id):
 	book_to_add = Book.objects.get(id__exact = book_id)
 	reader.books.add(book_to_add)
 	return redirect(reader.get_absolute_url())
-
-def get_current_path(request):
-	return {
-		'current_path': request.get_full_path()
-	}

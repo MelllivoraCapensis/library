@@ -6,7 +6,7 @@
 		<p>Пока нет ни одной книги ...</p>
 	{% endif %}
 	<ul class="list-group mb-5">
-		{% for reader_book in reader_books %}
+		{% for reader_book in reader.books.all %}
 			<li class="w-100 d-flex p-0 list-group-item align-content-between">
 				<a class="d-block p-2 not-underline text-light bg-info flex-grow-1" href="{{ reader_book.get_absolute_url }}">
 					{{ reader_book }}
@@ -17,20 +17,20 @@
 			</li>
 		{% endfor %}
 	</ul>
-	{% if user.id == reader.user.id and recommended_books %}
+	{% if user.id == reader.user.id and other_books %}
 		<h2 class="mb-5">Рекомендуемые книги</h2>
 		<form method="post">
 			{% csrf_token %}
 			<ul class="list-group-flush mb-5">
-			{% for recommended_book in recommended_books %}
+			{% for other_book in other_books %}
 				<li class="list-group-item p-0">
 					<label class="d-flex align-content-between">
-						<a href="{{ recommended_book.get_absolute_url }}" class="d-block p-2 text-left not-underline m-0">
-							{{ recommended_book }}
+						<a href="{{ other_book.get_absolute_url }}" class="d-block p-2 text-left not-underline m-0">
+							{{ other_book }}
 						</a>
 						<div class="d-block p-2 text-right flex-grow-1">
 							Выбрать
-							<input type="checkbox" name="book_id_{{ recommended_book.id }}">
+							<input type="checkbox" name="book_id_{{ other_book.id }}">
 						</div>
 					</label>
 				</li>

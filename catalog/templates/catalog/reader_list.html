@@ -15,6 +15,10 @@
 			</li>
 		{% endfor %}
 	</ul>
-	<h2>Зарегистрироваться</h2>	
-	{% include "catalog/form.html" with form=register_reader_form submit_value="Зарегистрироваться" %}
+	
+	{% if register_reader_form %}
+		<h2>Зарегистрироваться</h2>
+		{% include "catalog/form.html" with form=register_reader_form submit_value="Зарегистрироваться" %}
+	{% endif %}
+	
 {% endblock content %}

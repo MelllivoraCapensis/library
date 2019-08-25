@@ -1,8 +1,8 @@
 from django.test import TestCase
-from ..forms import AuthorUpdateForm
+from ..forms import AuthorForm
 from datetime import timedelta, date
 
-class AuthorUpdateFormTest(TestCase):
+class AuthorFormTest(TestCase):
 	def test_update_author_form_date_of_birth_is_earlier_than_today(self):
 		future_date = date.today() + timedelta(days = 5)
 		form = AuthorUpdateForm(data = {

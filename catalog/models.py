@@ -18,7 +18,7 @@ class Author(models.Model):
 		return reverse('author_detail', args = [str(self.id)])
 
 	def __str__(self):
-		return f'{self.last_name}, {self.first_name}'
+		return f'{self.first_name} {self.last_name}'
 
 class Book(models.Model):
 	title = models.CharField(max_length = 100, verbose_name = 'Название', help_text = 'Введите название книги')
@@ -48,3 +48,9 @@ class Reader(models.Model):
 
 	def get_absolute_url(self):
 		return reverse('reader_detail', args = [str(self.id)])
+
+	def get_other_books(self):
+		reader_books = self.books.all()
+		reader_book_ids = list([book.id for book in reader_books])
+		other_books = Book.objects.all().exclude(id__in = reader_book_ids)
+		return list(other_books)
