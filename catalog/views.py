@@ -63,8 +63,8 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
 	success_url = reverse_lazy('books_list')
 
 def reader_create_with_list(request):
-	context_data = {}
-	context_data['readers'] = Reader.objects.all()
+	context = {}
+	context['readers'] = Reader.objects.all()
 	if request.method == 'POST':
 		f = UserCreationForm(request.POST)
 		if f.is_valid():
@@ -75,12 +75,12 @@ def reader_create_with_list(request):
 			Reader.objects.create(user = new_user)
 			return redirect('login')
 	elif not request.user.is_authenticated:
-		context_data['register_reader_form'] = UserCreationForm()
-	return render(request, 'catalog/reader_list.html', context_data)
+		context['register_reader_form'] = UserCreationForm()
+	return render(request, 'catalog/reader_list.html', context)
 
 def reader_detail(request, id):
 	reader = Reader.objects.get(id__exact = id)
-
+	context = {}
 	if request.method == 'POST':
 		for item in dict(request.POST):
 			if 'book_id_' in item:
@@ -88,8 +88,13 @@ def reader_detail(request, id):
 				book = Book.objects.get(id__exact = item[prefix_length + 1:])
 				reader.books.add(book)
 
+	if request.user.is_authenticated:
+		if request.user.id == reader.user.id:
+			context['other_books'] = reader.get_other_books()
+	
+	context['reader'] = reader 
 	return render(request, 'catalog/reader_detail.html', 
-		{'reader': reader, 'other_books': reader.get_other_books()})
+		context = context)
 
 def book_delete_from_reader_list(request, reader_id, book_id):
 	reader = Reader.objects.get(id = reader_id)

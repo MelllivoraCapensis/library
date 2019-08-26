@@ -96,8 +96,9 @@ class BookModelTest(TestCase):
 			'The Good Book (Bob Bobson, 1950)')
 
 	def test_book_get_absolute_url(self):
+		book_id = BookModelTest.book.id
 		self.assertEquals(BookModelTest.book.get_absolute_url(),
-			'/catalog/book/1/')
+			f'/catalog/book/{book_id}/')
 
 	def test_title_label(self):
 		self.assertEquals(BookModelTest.book._meta.get_field('title').verbose_name,

@@ -44,7 +44,7 @@ class Reader(models.Model):
 		return "; ".join([b.title for b in self.books.all()])
 
 	def __str__(self):
-		return f'{ self.user.username }'
+		return f"{ self.user.username }"
 
 	def get_absolute_url(self):
 		return reverse('reader_detail', args = [str(self.id)])
