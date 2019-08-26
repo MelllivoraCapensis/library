@@ -8,10 +8,11 @@ def compare_ordered_querysets(qs1, qs2):
 	return True
 
 def get_unique_name(name_set):
-	name = 'new_user'
+	base_name = 'new_user'
+	name = base_name
 	i = 0
 	while name in name_set:
-		name += str(i)
+		name = base_name + '_' + str(i)
 		i += 1
 	return name
 
