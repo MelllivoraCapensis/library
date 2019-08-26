@@ -7,8 +7,9 @@ class AuthorSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 	def validate(self, data):
-		if data['date_of_death'] < data['date_of_birth']:
-			raise serializers.ValidationError('Дата смерти не может быть раньше даты рождения')
+		if 'date_of_death' in data.keys():
+			if data['date_of_death'] < data['date_of_birth']:
+				raise serializers.ValidationError('Дата смерти не может быть раньше даты рождения')
 		return data
 
 class BookSerializer(serializers.ModelSerializer):

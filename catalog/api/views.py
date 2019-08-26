@@ -25,10 +25,10 @@ def author_list(request):
 		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def author_detail(request, id):
+	author = Author.objects.get(id__exact = id)
 	if request.method == 'GET':
-		author = Author.objects.get(id__exact = id)
 		serializer = AuthorSerializer(author)
 		return Response(serializer.data)
 
@@ -68,10 +68,10 @@ def book_list(request):
 		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def book_detail(request, id):
+	book = Book.objects.get(id__exact = id)
 	if request.method == 'GET':
-		book = Book.objects.get(id__exact = id)
 		serializer = BookSerializer(book)
 		return Response(serializer.data)
 
