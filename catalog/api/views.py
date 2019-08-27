@@ -25,7 +25,7 @@ def author_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def author_detail(request, id):
-	author = Author.objects.get(id__exact = id)
+	author = Author.objects.get(id = id)
 	if request.method == 'GET':
 		serializer = AuthorSerializer(author)
 		return Response(serializer.data)
@@ -68,7 +68,7 @@ def book_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def book_detail(request, id):
-	book = Book.objects.get(id__exact = id)
+	book = Book.objects.get(id = id)
 	if request.method == 'GET':
 		serializer = BookSerializer(book)
 		return Response(serializer.data)
