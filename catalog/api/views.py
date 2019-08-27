@@ -100,3 +100,9 @@ def reader_books(request, id):
 	reader_books = Reader.objects.get(id = id).books.all()
 	serializer = BookSerializer(reader_books, many = True)
 	return Response(serializer.data)
+
+@api_view(['GET'])
+def author_books(request, id):
+	author_books = Author.objects.get(id = id).book_set.all()
+	serializer = BookSerializer(author_books, many = True)
+	return Response(serializer.data)

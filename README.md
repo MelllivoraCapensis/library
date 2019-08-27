@@ -18,6 +18,7 @@
 - /api/book/book_id/ - GET (информация об книги), PUT/DELETE - обновление/удаление книги, для авторизованного staff
 - /api/readers/ - GET (список читателей)
 - /api/reader/reader_id/books/ - GET (список книг одного читателя)
+- /api/author/author_id/books/ - GET (список книг одного автора)
 
 ### Фикстуры
 /catalog/fixtures/all_data.json
