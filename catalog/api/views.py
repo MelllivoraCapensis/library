@@ -1,12 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ..models import Author, Book
-from .serializers import AuthorSerializer, BookSerializer
-from django.http import JsonResponse
+from ..models import Author, Book, Reader
+from django.contrib.auth.models import User
+from .serializers import AuthorSerializer, BookSerializer, ReaderSerializer
 from rest_framework import status
-from django.contrib.auth.decorators import permission_required
-from rest_framework import generics
-from django.contrib.auth.mixins import PermissionRequiredMixin
+
 
 @api_view(['GET', 'POST'])
 def author_list(request):
@@ -90,3 +88,15 @@ def book_detail(request, id):
 		book.delete()
 		return Response(status = status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET'])
+def reader_list(request):
+	readers = Reader.objects.all()
+	serializer = ReaderSerializer(readers, many = True)
+	return Response(serializer.data)
+
+@api_view(['GET'])
+def reader_books(request, id):
+	reader_books = Reader.objects.get(id = id).books.all()
+	serializer = BookSerializer(reader_books, many = True)
+	return Response(serializer.data)
