@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView, ListView
@@ -79,7 +79,7 @@ def reader_create_with_list(request):
 	return render(request, 'catalog/reader_list.html', context)
 
 def reader_detail(request, id):
-	reader = Reader.objects.get(id__exact = id)
+	reader = get_object_or_404(Reader, id = id)
 	context = {}
 	if request.method == 'POST':
 		for item in dict(request.POST):
