@@ -28,6 +28,7 @@ class BookForm(ModelForm):
 		fields = '__all__'
 
 	def clean_year(self):
+		print(date.today().year, self.cleaned_data['year'])
 		if date.today().year < self.cleaned_data['year']:
 			raise ValidationError('Дата выпуска книги не может быть позже текущего года')
 		return self.cleaned_data['year']

@@ -17,6 +17,7 @@ form.onsubmit = function(e) {
 	xhr.send(authorData);
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4) {
+			console.log(xhr);
 			if(xhr.status == 201) form.reset();
 			var message = createMessage(xhr);
 			document.body.appendChild(message);
