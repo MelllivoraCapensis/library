@@ -31,9 +31,9 @@ FIXTURES_DIRS = [
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '8=0j^gr=21oa&d)u5_#8xl8k8yeeona#3e!%qqs2%sn0zdwl2w')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = False
 
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = ['testserver', 'localhost', 'library-dk.herokuapp.com']
 
