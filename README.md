@@ -26,3 +26,6 @@
 ### Рабочее приложение: 
 https://library-dk.herokuapp.com/catalog/readers/
 
+staff: username - albertu, password - dima1234
+readers: usernames - bob, pablo, antonio, kevin, patrick, kit password - dima1234
+
