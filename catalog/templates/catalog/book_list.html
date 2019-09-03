@@ -6,14 +6,16 @@
 
 	{% include "catalog/item_list.html" with items=book_list delete_view_name='book_delete' update_view_name='book_update' perm_to_update=perms.catalog.change_book perm_to_delete=perms.catalog.delete_book %}
 
+{% endblock content %}
+
+{% block form %}
 	{% if form %}
 
 		<h3 class="mb-5">Добавить новую книгу</h3>
-		{% include "catalog/form.html" with form=form submit_value="Добавить" form_id="add_book_form" %}
+		{% include "catalog/form.html" with form=form submit_value="Добавить" form_id="add_book_form" enctype='multipart/form-data'%}
 
 	{% endif %}
-
-{% endblock content %}
+{% endblock form %}
 
 {% block scripts %}
 	{% if form %}

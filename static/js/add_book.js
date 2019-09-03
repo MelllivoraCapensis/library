@@ -3,12 +3,11 @@ var csrfToken = Cookies.get('csrftoken');
 
 form.onsubmit = function(e) {
 	e.preventDefault();
-	bookData = JSON.stringify(Object.fromEntries(
-		new FormData(form)));
+	bookData = new FormData(form);
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/api/books/', true);
-	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.open('POST', '/api/books/');
+	// xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 	xhr.setRequestHeader('X-CSRFToken', csrfToken);
 	xhr.send(bookData);
 	xhr.onreadystatechange = function() {

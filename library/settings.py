@@ -16,6 +16,7 @@ from django.urls import reverse_lazy
 
 
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,9 +32,11 @@ FIXTURES_DIRS = [
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '8=0j^gr=21oa&d)u5_#8xl8k8yeeona#3e!%qqs2%sn0zdwl2w')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
 
-# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+
+SITE_ID = 1
 
 ALLOWED_HOSTS = ['testserver', 'localhost', 'library-dk.herokuapp.com']
 
@@ -50,6 +53,10 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'rest_framework',
     'corsheaders',
+    'sorl.thumbnail',
+    'clear_cache',
+    'django.contrib.sites'
+
 ]
 
 MIDDLEWARE = [
@@ -158,3 +165,8 @@ CORS_URLS_REGEX = r'^/api/.*$'
 
 db_from_env = dj_database_url.config(conn_max_age = 500)
 DATABASES['default'].update(db_from_env)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+

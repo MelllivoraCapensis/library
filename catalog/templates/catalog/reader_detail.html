@@ -9,6 +9,7 @@
 		{% for reader_book in reader.books.all %}
 			<li class="w-100 d-flex p-0 list-group-item align-content-between">
 				<a class="d-block p-2 not-underline text-light bg-info flex-grow-1" href="{{ reader_book.get_absolute_url }}">
+					<img class="mr-3" src="{{ reader_book.get_image_small.url }}">
 					{{ reader_book }}
 				</a>
 				{% if user.id == reader.user.id %}

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load thumbnail %}
+
 {% block content %}
 	<h1>
 		{{ author }}
@@ -13,10 +15,13 @@
 			наши дни
 		{% endif %}
 		)
-	</p>
-	<p>
+	</p>	
+	<p class="clearfix">
+		<img class="bg-light float-left mr-2 mb-3" src="{{ author.get_image_large.url }}">
 		{{ author.biography }}
 	</p>
+
+
 	<h4 class="mb-3">Все книги автора</h4>
 	{% include "catalog/item_list.html" with items=author.book_set.all %}
 	{% if perms.catalog.change_author %}

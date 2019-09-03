@@ -33,3 +33,36 @@ a.not-underline {
 
 	cursor: pointer;
 }
+
+.change-avatar-button {
+	display: none;
+}
+
+#grade_slider {
+	position: relative;
+
+	align-self: center;
+
+	display: flex;
+	align-items: center;
+
+	margin-right: 20px;
+
+	width: 200px;
+	height: 30px;
+
+	background-image: url('../images/grade_star_default.png');
+	background-repeat: repeat-x;
+	background-size: 20px 20px;
+	background-position: left center;
+}
+
+.grade-stars{
+	height: 100%;
+
+	background-image: url('../images/grade_star_active.png');
+	background-repeat: repeat-x;
+	background-size: 20px 20px;
+	background-position: left center;
+
+}

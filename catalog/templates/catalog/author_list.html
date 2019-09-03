@@ -7,14 +7,18 @@
 
 		{% include "catalog/item_list.html" with items=author_list update_view_name='author_update' delete_view_name='author_delete' perm_to_delete=perms.catalog.delete_author perm_to_update=perms.catalog.change_author %}
 
+{% endblock content %}
+
+{% block form %}
+
 		{% if form %}
 				<h3 class="mb-5">Добавить автора</h3>
 
-				{% include "catalog/form.html"  with form=form submit_value='Добавить' form_id="add_author_form" %}
+				{% include "catalog/form.html"  with form=form submit_value='Добавить' form_id="add_author_form" enctype="multipart/form-data" %}
 
 		{% endif %}
 
-{% endblock content %}
+{% endblock form %}
 
 {% block scripts %}
 	{% if form %}

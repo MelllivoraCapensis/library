@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2 class="mb-5">Изменить аватар</h2>
+	{% include "catalog/form.html" with form=form submit_value="Сохранить изменения" enctype="multipart/form-data" %}
+{% endblock content %}

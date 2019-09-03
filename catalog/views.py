@@ -4,13 +4,16 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
-from .models import Author, Book, Reader
+from .models import Author, Book, Reader, Grade
 from django import forms
 from .forms import AuthorForm, BookForm
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponseForbidden
+from django.core.paginator import Paginator
 
 class AuthorList(ListView):
 	model = Author
+	paginate_by = 5
 
 	def get_context_data(self, **kwargs):
 		if self.request.user.has_perm('catalog.add_author'):
@@ -33,6 +36,7 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 class BookList(ListView):
 	model = Book
+	paginate_by = 5
 
 	def get_context_data(self, **kwargs):
 		if self.request.user.has_perm('catalog.add_book'):
@@ -45,10 +49,12 @@ class BookDetail(DetailView):
 	def get_context_data(self, **kwargs):
 		user = self.request.user
 		if hasattr(user, 'reader'):
-			kwargs['user_is_reader'] = True
-			user_book_ids = list([book.id for book in user.reader.books.all()])
-			if self.get_object().id in user_book_ids:
-				kwargs['book_in_reader_list'] = True
+			grade = Grade.objects.filter(
+				reader__id = user.reader.id).filter(
+				book__id = self.object.id)
+			if grade:
+				kwargs['grade'] = grade[0]
+			
 		return super(DetailView, self).get_context_data(**kwargs)
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
@@ -96,6 +102,31 @@ def reader_detail(request, id):
 	return render(request, 'catalog/reader_detail.html', 
 		context = context)
 
+class ReaderUpdate(UpdateView):
+	model = Reader
+	fields = ('image',)
+	template_name_suffix = '_update_form'
+
+	def can_change_avatar(func):
+		def func_wrapper(self, request, *args, **kwargs):
+			if not hasattr(request.user, 'reader'):
+				return HttpResponseForbidden()
+			self.object = self.get_object()
+			if self.object.id != request.user.reader.id:
+				return HttpResponseForbidden()
+			return func(self, request, *args, **kwargs)
+
+		return func_wrapper
+
+	@can_change_avatar	
+	def get(self, request, *args, **kwargs):		
+		return super(UpdateView, self).get(request, *args, **kwargs)
+
+	@can_change_avatar
+	def post(self, request, *args, **kwargs):
+		return super(UpdateView, self).post(request, *args, **kwargs)
+
+
 def book_delete_from_reader_list(request, reader_id, book_id):
 	reader = Reader.objects.get(id = reader_id)
 	book_to_delete = Book.objects.get(id__exact = book_id)
@@ -107,3 +138,4 @@ def book_add_to_reader_list(request, reader_id, book_id):
 	book_to_add = Book.objects.get(id__exact = book_id)
 	reader.books.add(book_to_add)
 	return redirect(reader.get_absolute_url())
+

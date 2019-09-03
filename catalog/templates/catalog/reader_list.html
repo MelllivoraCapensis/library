@@ -10,15 +10,18 @@
 		{% for reader in readers %}
 			<li class="list-group-item p-0">
 				<a class="d-block btn-light p-2 not-underline" href="{{ reader.get_absolute_url }}">
-					{{ reader }}
-				</a>
+					<img class="mr-3" src="{{ reader.get_image_small.url }}">{{ reader }}</a>
 			</li>
 		{% endfor %}
 	</ul>
 	
+	
+	
+{% endblock content %}
+
+{% block form %}
 	{% if register_reader_form %}
 		<h2>Зарегистрироваться</h2>
 		{% include "catalog/form.html" with form=register_reader_form submit_value="Зарегистрироваться" %}
 	{% endif %}
-	
-{% endblock content %}
+{% endblock form %}

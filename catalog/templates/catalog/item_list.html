@@ -1,21 +1,27 @@
+{% load thumbnail %}
 <ul class="list-group list-group-flush mb-5">
 	{% for item in items %}
 	<li class="list-group-item p-0 d-flex align-content-between mb-2">
 		<a class="d-block p-3 not-underline btn-light flex-grow-1" href="{{ item.get_absolute_url }}">
-			{{ item }}
+
+			<img src="{{ item.get_image_small.url }}" 
+				height="{{ item.get_image_small.height }}">
+
+			<span class="ml-3">
+				{{ item }}
+			</span>	
 		</a>
-			<div class="d-flex flex-column">
-				{% if perm_to_update %}
-					<a class="btn-dark p-2 not-underline text-center" href="{% url update_view_name pk=item.id %}">
-					Редактировать
-					</a>
-				{% endif %}
-				{% if perm_to_delete %}
-					<a class="btn-danger p-2 not-underline text-center" href="{% url delete_view_name pk=item.id %}">Удалить</a>
-				{% endif %}
-				
-			</div>
-	
+		
+		<div class="d-flex flex-column align-self-center">
+			{% if perm_to_update %}
+				<a class="btn-dark p-2 not-underline text-center" href="{% url update_view_name pk=item.id %}">
+				Редактировать
+				</a>
+			{% endif %}
+			{% if perm_to_delete %}
+				<a class="btn-danger p-2 not-underline text-center" href="{% url delete_view_name pk=item.id %}">Удалить</a>
+			{% endif %}
+		</div>
 	</li>
 	{% endfor %}
 </ul>

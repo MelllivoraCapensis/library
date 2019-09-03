@@ -43,7 +43,7 @@ class StaffApiTest(TestCase):
 			'date_of_birth': '1950-10-18',
 			'biography': 'nothing is known',
 		}
-		response = client.post('/api/authors/', data = author_data, format = 'json')
+		response = client.post('/api/authors/', data = author_data, format = 'multipart')
 		self.assertTrue(response.status_code == 201 and Author.objects.get(first_name = 'Billy'))
 
 	def test_staff_get_book_list(self):
@@ -62,7 +62,8 @@ class StaffApiTest(TestCase):
 			'year': 2000,
 			'description': 'nothing is known',
 		}
-		response = client.post('/api/books/', data = book_data, format = 'json')
+		response = client.post('/api/books/', data = book_data,
+			format = 'multipart')
 		self.assertTrue(response.status_code == 201 and Book.objects.get(title = 'The book'))
 
 	def test_staff_can_update_book_via_api(self):
@@ -73,7 +74,7 @@ class StaffApiTest(TestCase):
 			'year': test_book.year,
 			'author': test_book.author.id,
 			'description': test_book.description
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 200)
 		self.assertEqual(Book.objects.get(id = test_book.id).title, 'Test Book After Updating')
 
@@ -92,7 +93,7 @@ class StaffApiTest(TestCase):
 			'last_name': 'Test Author After Updating',
 			'date_of_birth': test_author.date_of_birth,
 			'biography': test_author.biography,
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 200)
 		self.assertEqual(Author.objects.get(id = test_author.id).last_name, 
 			'Test Author After Updating')
@@ -144,7 +145,7 @@ class ReaderApiTest(TestCase):
 			'date_of_birth': '1950-10-18',
 			'biography': 'nothing is known',
 		}
-		response = client.post('/api/authors/', data = author_data, format = 'json')
+		response = client.post('/api/authors/', data = author_data, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_reader_get_book_list(self):
@@ -163,7 +164,7 @@ class ReaderApiTest(TestCase):
 			'year': 2000,
 			'description': 'nothing is known',
 		}
-		response = client.post('/api/authors/', data = book_data, format = 'json')
+		response = client.post('/api/authors/', data = book_data, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 
@@ -175,7 +176,7 @@ class ReaderApiTest(TestCase):
 			'year': test_book.year,
 			'author': test_book.author.id,
 			'description': test_book.description
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_reader_cannot_delete_book_via_api(self):
@@ -193,7 +194,7 @@ class ReaderApiTest(TestCase):
 			'last_name': 'Test Author After Updating',
 			'date_of_birth': test_author.date_of_birth,
 			'biography': test_author.biography,
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_reader_cannot_delete_author_via_api(self):
@@ -237,7 +238,7 @@ class AnonApiTest(TestCase):
 			'date_of_birth': '1950-10-18',
 			'biography': 'nothing is known',
 		}
-		response = client.post('/api/authors/', data = author_data, format = 'json')
+		response = client.post('/api/authors/', data = author_data, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_anon_get_book_list(self):
@@ -256,7 +257,7 @@ class AnonApiTest(TestCase):
 			'year': 2000,
 			'description': 'nothing is known',
 		}
-		response = client.post('/api/books/', data = book_data, format = 'json')
+		response = client.post('/api/books/', data = book_data, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_anon_cannot_update_book_via_api(self):
@@ -267,7 +268,7 @@ class AnonApiTest(TestCase):
 			'year': test_book.year,
 			'author': test_book.author.id,
 			'description': test_book.description
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_anon_cannot_delete_book_via_api(self):
@@ -285,7 +286,7 @@ class AnonApiTest(TestCase):
 			'last_name': 'Test Author After Updating',
 			'date_of_birth': test_author.date_of_birth,
 			'biography': test_author.biography,
-			}, format = 'json')
+			}, format = 'multipart')
 		self.assertTrue(response.status_code == 403)
 
 	def test_anon_cannot_delete_author_via_api(self):

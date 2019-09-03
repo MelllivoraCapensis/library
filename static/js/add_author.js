@@ -3,16 +3,17 @@ var csrfToken = Cookies.get('csrftoken');
 
 form.onsubmit = function(e) {
 	e.preventDefault();
-	authorData = JSON.stringify({
-		'first_name': form.first_name.value,
-		'last_name': form.last_name.value,
-		'date_of_birth': form.date_of_birth.value,
-		'date_of_death': form.date_of_death.value,
-		'biography': form.biography.value,
-	});
+	// authorData = JSON.stringify({
+	// 	'first_name': form.first_name.value,
+	// 	'last_name': form.last_name.value,
+	// 	'date_of_birth': form.date_of_birth.value,
+	// 	'date_of_death': form.date_of_death.value,
+	// 	'biography': form.biography.value,
+	// });
+	var authorData = new FormData(form);
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/api/authors/', true);
-	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.open('POST', '/api/authors/');
+	// xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.setRequestHeader('X-CSRFToken', csrfToken);
 	xhr.send(authorData);
 	xhr.onreadystatechange = function() {

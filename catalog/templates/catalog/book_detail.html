@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% load thumbnail %}
+
 {% block content %}
 	<h1>
 		{{ book }}
@@ -9,22 +12,78 @@
 			{{ book.author }}
 		</a>
 	</p>
-	<p>
+	
+	<p class="clearfix">
+		<img class="float-left mr-2 mb-3" src="{{ book.get_image_large.url }}">
+
 		{{ book.description }}
 	</p>
+
+	<div id="grade_container">
+
+		<p id="average_grade_text">
+			{% if book.get_average_grade %}
+					Средняя оценка пользователей: {{ book.get_average_grade }}
+			{% else %}
+					Оценок еще нет ...
+			{% endif %}
+		</p>
+
+		<div class="d-flex" id="grade_forms">
+			{% if user.reader %}
+					<div id="grade_slider"></div>
+					<form class="{% if grade %}d-none{% endif %}" id="create_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}">
+						<input class="d-none" min="0" max="10" name="value" type="number">
+						<button>Оценить</button>
+					</form>
+					<form class="{% if not grade %}d-none{% endif %}" id="update_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}">
+						<input class="d-none" min="0" max="10" name="value" type="number">
+						<button>Изменить оценку</button>
+					</form>
+					<form class="{% if not grade %}d-none{% endif %}" id="delete_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}" method="delete">
+						<button>
+							Удалить оценку
+						</button>
+					</form>
+			{% endif %}
+		</div>
+
+		<p id="current_grade_text">
+			{% if grade %}
+					Текущая оценка - {{ grade.value }}</span>
+			{% endif %}	
+		</p>
+
+	</div>
+
+	{% if book.file %}
+		<p>
+			<a href="{{ book.file.url }}" target="_blank">
+				Скачать книгу "{{ book.title }}"
+			</a>
+		</p>
+	{% endif %}
+	
 	<p>
 		{% if perms.catalog.add_book %}
 			{% include "catalog/detail_item_bar.html" with book=book delete_view_name='book_delete' update_view_name='book_update' %}
 		{% endif %}
 	</p>
-	{% if user_is_reader %}
+	{% if user.reader %}
 		{% if book_in_reader_list %}
-			<a class="d-block btn-info p-2 w-100 text-center not-underline" href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Удалить из моего списка
+			<a class="d-block btn-info p-2 w-100 text-center not-underline mb-5" href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Удалить из моего списка
 			</a>
 		{% else %}
-			<a class="d-block btn-danger p-2 w-100 not-underline text-center" href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
+			<a class="d-block btn-danger p-2 w-100 not-underline text-center mb-5" href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
 			Добавить в мой список
 			</a>
 		{% endif %}
 	{% endif %}
 {% endblock content %}
+
+{% block scripts %}
+	{% if user.reader %}
+		<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+		<script src="{% static 'js/grade.js' %}"></script>
+	{% endif %}
+{% endblock scripts %}
