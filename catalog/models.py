@@ -35,13 +35,13 @@ class Author(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''http://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
+		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
 		 'x' + str(self.IMAGE_HEIGHT_SMALL))
 
 	def get_image_large(self):
 		if self.image:
 			return get_thumbnail(self.image, str(self.IMAGE_WIDTH_LARGE))
-		return get_thumbnail(f'''http://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
+		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
 				str(self.IMAGE_WIDTH_LARGE))
 
 
@@ -76,7 +76,7 @@ class Book(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''http://{Site.objects.get_current()}
+		return get_thumbnail(f'''https://{Site.objects.get_current()}
 			{settings.MEDIA_URL}book_default.png''',
 			 'x' + str(self.IMAGE_HEIGHT_SMALL))
 
@@ -84,7 +84,7 @@ class Book(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 
 				str(self.IMAGE_WIDTH_LARGE))
-		return get_thumbnail(f'''http://{Site.objects.get_current()}
+		return get_thumbnail(f'''https://{Site.objects.get_current()}
 			{settings.MEDIA_URL}book_default.png''', 
 			str(self.IMAGE_WIDTH_LARGE))
 
@@ -125,7 +125,7 @@ class Reader(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''http://{Site.objects.get_current()}{settings.MEDIA_URL}user_default.png''',
+		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}user_default.png''',
 			'x' + str(self.IMAGE_HEIGHT_SMALL))
 
 class Grade(models.Model):
