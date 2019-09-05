@@ -3,6 +3,7 @@
 - Author (имя, фамилия, год рождения, год смерти(необязательное поле), краткая биография)
 - Book (название, год написания, автор - из модели Авторы, краткое описание)
 - Reader (привязан к стандартному User один к одному, книги - поле многие ко многим с моделью Book )
+- Grade (оценка, привязана к Book и Reader, число от 1 до 10)
 ## Пользователи
 ###### Стандартная модель User (username, password)
 - группа staff; могут добавлять, редактировать, удалять авторов и книги
@@ -19,13 +20,14 @@
 - /api/readers/ - GET (список читателей)
 - /api/reader/reader_id/books/ - GET (список книг одного читателя)
 - /api/author/author_id/books/ - GET (список книг одного автора)
+- /api/book/book_id/reader/reader_id/grade/ - GET, POST, PUT, DELETE (получение, добавление, изменение и удаление оценки книги book_id читателем reader_id)
 
 ### Фикстуры
 /catalog/fixtures/all_data.json
 
 ### Рабочее приложение: 
-https://library-dk.herokuapp.com/catalog/readers/
+https://librarydk.pythonanywhere.com
 
 - staff: username - albertu, password - dima1234
-- readers: usernames - bob, pablo, antonio, kevin, patrick, kit password - dima1234
+- readers: usernames - bob, pablo, antonio, kevin, patrick, penelopa, kit password - dima1234
 
