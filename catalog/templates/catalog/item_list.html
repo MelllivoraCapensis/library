@@ -1,15 +1,32 @@
 {% load thumbnail %}
-<ul class="list-group list-group-flush mb-5">
+<ul class="list-group list-group-flush mb-5 border p-2">
 	{% for item in items %}
 	<li class="list-group-item p-0 d-flex align-content-between mb-2">
 		<a class="d-block p-3 not-underline btn-light flex-grow-1" href="{{ item.get_absolute_url }}">
 
-			<img src="{{ item.get_image_small.url }}" 
+			<div>
+				<img src="{{ item.get_image_small.url }}" 
 				height="{{ item.get_image_small.height }}">
 
-			<span class="ml-3">
-				{{ item }}
-			</span>	
+				<span class="ml-3">
+					{{ item }}
+				</span>	
+			</div>
+	
+			{% if item.user_grade %}
+				<div>
+					Моя оценка:
+					{% include "catalog/grade_slider.html" with grade=item.user_grade %}
+				</div>
+			{% else %}
+				{% if item.get_average_grade %}
+					Рейтинг: 
+				    {% include "catalog/grade_slider.html" with grade=item.get_average_grade %}
+				    Оценок:
+				    {{ item.get_grades_count }}
+				{% endif %}
+				
+			{% endif %}
 		</a>
 		
 		<div class="d-flex flex-column align-self-center">
@@ -25,3 +42,94 @@
 	</li>
 	{% endfor %}
 </ul>
+
+{% block pagination %}
+	{% if page_obj.paginator.num_pages > 1 %}
+		{% if is_paginated %}
+			<nav class="mb-5">
+			 <ul class="pagination d-flex justify-content-center">
+			 	{% if page_obj.has_previous %}
+			 		 <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">предыдущая</a></li>
+			 	{% endif %}
+
+			 	{# first page #}
+
+			 	<li class="page-item">
+			 		{% if page_obj.number == 1 %}
+			 			<span class="sr-only">
+			 				1
+			 			</span>
+			 		{% else %}
+			 			<a class="page-link" href="{{ request.path }}?page=1">1</a>
+			 		{% endif %}
+			 	</li>
+
+			 	{# ellipsis #}
+
+			 	{% if page_obj.number >= 4 %}
+			 		<li class="page_item d-flex align-items-end ml-2 mr-2">
+			 			<span class="sr_only">
+			 				. . .
+			 			</span>
+			 		</li>
+			 	{% endif %}
+
+			 	{# 1 prev page #}
+
+			    {% if page_obj.has_previous and page_obj.number >= 3 %}
+			 		 <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
+			 		 	{{ page_obj.previous_page_number }}
+			 		 </a></li>
+			 	{% endif %}
+
+			 	{# current page #}
+
+			    <li class="page-item active">
+			    	<span class="page-link">
+			    		 {{ page_obj.number }}
+			    	</span>
+			    </a>
+				</li>
+
+				{# 1 next page #}
+
+				 {% if page_obj.has_next and page_obj.number <= page_obj.paginator.num_pages|add:-2 %}
+			    	<li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">
+			    		{{ page_obj.next_page_number }}
+			    	</a></li>
+			    {% endif %}
+
+			    {# ellipsis #}
+
+			 	{% if page_obj.number <= page_obj.paginator.num_pages|add:-3  %}
+			 		<li class="page_item d-flex align-items-end ml-2 mr-2">
+			 			<span class="">. . .</span>
+			 		</li>
+			 	{% endif %}
+
+
+
+				<li class="page-item">
+			 		{% if page_obj.number == page_obj.paginator.num_pages %}
+			 			<span class="sr-only">
+			 				{{ page_obj.paginator.num_pages }}
+			 			</span>
+			 		{% else %}
+			 			<a class="page-link" href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">
+			 			{{ page_obj.paginator.num_pages }}
+			 			</a>
+			 		{% endif %}
+
+			 	</li>
+			   
+			    {% if page_obj.has_next %}
+			    	<li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">следующая</a></li>
+			    {% endif %}
+			    
+			  </ul>
+			 </nav>
+		{% endif %}
+	{% endif %}
+	
+					
+{% endblock pagination %}

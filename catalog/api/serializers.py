@@ -7,10 +7,13 @@ class AuthorSerializer(serializers.ModelSerializer):
 		model = Author
 		fields = '__all__'
 
+	average_grade = serializers.CharField(source = 'get_average_grade',
+		required = False)
+
 	def validate(self, data):
 		if data['date_of_birth'] > date.today():
 			raise serializers.ValidationError('Вы не можете предсказать дату рождения автора')
-		if 'date_of_death' not in data.keys():
+		if 'date_of_death' not in data.keys() or data['date_of_death'] == None:
 			return data
 
 		if data['date_of_death'] < data['date_of_birth']:
@@ -24,7 +27,8 @@ class BookSerializer(serializers.ModelSerializer):
 		model = Book
 		fields = '__all__'
 
-	average_grade = serializers.CharField(source = 'get_average_grade')
+	average_grade = serializers.CharField(
+		source = 'get_average_grade', required = False)
 
 	def validate(self, data):
 		if data['year'] > date.today().year:

@@ -18,12 +18,13 @@ from django.urls import path, include
 from django.shortcuts import redirect
 from django.conf.urls.static import static
 from . import settings
+import catalog
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
-    path('', lambda request: redirect('catalog/readers/', permanent = True), name = 'home'),
+    path('', catalog.views.home, name = 'home'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('catalog.api.urls')),
 ]

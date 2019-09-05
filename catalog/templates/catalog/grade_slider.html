@@ -1,0 +1,4 @@
+{% load custom_filters %}
+<div class="grade-slider" id="grade_slider">
+	<div class="grade-stars" {% if grade %}style="width:{{ grade|multiply:10 }}%;"{% endif %}></div>
+</div>

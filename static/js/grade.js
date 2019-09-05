@@ -98,7 +98,7 @@ function switchCreateMode() {
 function switchUpdateMode(xhr) {
 	updateGradeForm.value.value = '';
 	createGradeForm.value.value = '';	
-	currentGradeText.innerHTML = 'Текущая оценка - ' 
+	currentGradeText.innerHTML = 'Ваша оценка - ' 
 		+ xhr.responseText;
 	createGradeForm.classList.add('d-none');
 	updateGradeForm.classList.remove('d-none');

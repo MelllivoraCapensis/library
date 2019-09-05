@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2 class="mb-5">
+		{% if user.id == reader.user.id %}
+			Мои книги
+		{% else %}
+			Книги пользователя {{ reader }}
+		{% endif %}
+	</h2>
+
+	{% if reader.books.count == 0 %}
+		<p>Пока нет ни одной книги ...</p>
+	{% endif %}
+
+	{% include "catalog/item_list.html" with items=reader.books.all %}
+
+	{% if user.id == reader.user.id and other_books%}
+		<h2 class="mb-5">Рекомендуемые книги</h2>
+		<form method="post">
+			{% csrf_token %}
+			<ul class="list-group-flush mb-5">
+			{% for book in other_books %}
+				<li class="list-group-item p-0">
+					<label class="d-flex align-content-between">
+						<a href="{{ book.get_absolute_url }}" class="d-block p-2 text-left not-underline m-0">
+							{{ book }}
+						</a>
+						<div class="d-block p-2 text-right flex-grow-1">
+							Выбрать
+							<input type="checkbox" name="book_id_{{ book.id }}">
+						</div>
+					</label>
+				</li>
+			{% endfor %}
+			<button class="btn-info w-100 p-2 border-0">Добавить</button>
+		</form>
+	{% endif %}
+{% endblock content %}

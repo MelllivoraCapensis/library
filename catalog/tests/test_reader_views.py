@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from ..utils import get_unique_name
 from django.contrib.auth.models import User, Group
 from re import findall
+from ..views import BookList, AuthorList
 
 
 class ReaderViewTest(TestCase):
@@ -23,8 +24,8 @@ class ReaderViewTest(TestCase):
 	def test_reader_get_reader_list(self):
 		client = ReaderViewTest.reader_client
 		response = client.get('/catalog/readers/')
-		derived_readers = list(response.context['readers'].order_by('id'))
-		expected_readers = list(Reader.objects.all().order_by('id'))
+		derived_readers = list(response.context['readers'])
+		expected_readers = list(Reader.objects.all()[:5])
 		self.assertListEqual(expected_readers, derived_readers)
 
 	def test_reader_don_t_get_register_form(self):
@@ -35,8 +36,8 @@ class ReaderViewTest(TestCase):
 	def test_reader_get_author_list(self):
 		client = ReaderViewTest.reader_client
 		response = client.get('/catalog/authors/')
-		expected_authors = list(Author.objects.order_by('id'))
-		derived_authors = list(response.context['author_list'].order_by('id'))
+		expected_authors = list(Author.objects.all())[:AuthorList.paginate_by]
+		derived_authors = list(response.context['author_list'])
 		self.assertListEqual(expected_authors, derived_authors)
 
 	def test_reader_don_t_get_author_create_form(self):
@@ -76,9 +77,9 @@ class ReaderViewTest(TestCase):
 		client = ReaderViewTest.reader_client
 		response = client.get('/catalog/books/')
 		derived_books = list(
-			response.context['book_list'].order_by('id'))
+			response.context['book_list'])
 		expected_books = list(
-			Book.objects.order_by('id'))
+			Book.objects.all())[:BookList.paginate_by]
 		self.assertListEqual(derived_books, expected_books)
 
 	def test_reader_don_t_get_book_create_form(self):

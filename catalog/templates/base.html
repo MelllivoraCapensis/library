@@ -27,8 +27,11 @@
 					</div>
 					
 					{% if user.reader %}
-						<a class="btn  btn-outline-dark btn-sm mr-3 {% if request.resolver_match.url_name == 'reader_detail' and user.reader.id == request.resolver_match.kwargs.id %}disabled{% endif %}" href="{% url 'reader_detail' id=user.reader.id %}">
-							Моя страница
+						<a class="btn  btn-outline-dark btn-sm mr-3 {% if request.resolver_match.url_name == 'reader_book_list' and user.reader.id == request.resolver_match.kwargs.id %}disabled{% endif %}" href="{% url 'reader_book_list' id=user.reader.id %}">
+							Мои книги
+						</a>
+						<a class="btn  btn-outline-dark btn-sm mr-3 {% if request.resolver_match.url_name == 'reader_grade_list' and user.reader.id == request.resolver_match.kwargs.id %}disabled{% endif %}" href="{% url 'reader_grade_list' id=user.reader.id %}">
+							Мои оценки
 						</a>
 						<a href="{% url 'reader_update' pk=user.reader.pk %}" class="btn btn-outline-dark mr-3 btn-sm">
 							Сменить аватар
@@ -48,7 +51,7 @@
 		<div class="row">
 			<ul class="nav-menu nav col-3 nav-pills flex-column" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 				<li class="nav-item">
-					<a href="{% url 'readers_list' %}" class="nav-link {% if request.resolver_match.url_name == 'readers_list' %}active{% endif %}">
+					<a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
 						Главная
 					</a>
 				</li>
@@ -60,6 +63,11 @@
 				<li class="nav-item">
 					<a href="{% url 'books_list' %}" class="nav-link {% if request.resolver_match.url_name == 'books_list' %}active{% endif %}">
 						Книги
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="{% url 'readers_list' %}" class="nav-link {% if request.resolver_match.url_name == 'readers_list' %}active{% endif %}">
+						Читатели
 					</a>
 				</li>
 				<li class="nav-item">
@@ -75,94 +83,7 @@
 					
 				{% endblock content %}
 
-				{% block pagination %}
-					{% if is_paginated %}
-						<nav class="mb-5">
-						 <ul class="pagination d-flex justify-content-center">
-						 	{% if page_obj.has_previous %}
-						 		 <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a></li>
-						 	{% endif %}
-
-						 	{# first page #}
-
-						 	<li class="page-item">
-						 		{% if page_obj.number == 1 %}
-						 			<span class="sr-only">
-						 				1
-						 			</span>
-						 		{% else %}
-						 			<a class="page-link" href="{{ request.path }}?page=1">1</a>
-						 		{% endif %}
-						 	</li>
-
-						 	{# ellipsis #}
-
-						 	{% if page_obj.number >= 4 %}
-						 		<li class="page_item d-flex align-items-end ml-2 mr-2">
-						 			<span class="sr_only">
-						 				. . .
-						 			</span>
-						 		</li>
-						 	{% endif %}
-
-						 	{# 1 prev page #}
-
-						    {% if page_obj.has_previous and page_obj.number >= 3 %}
-						 		 <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
-						 		 	{{ page_obj.previous_page_number }}
-						 		 </a></li>
-						 	{% endif %}
-
-						 	{# current page #}
-
-						    <li class="page-item active">
-						    	<span class="page-link">
-						    		 {{ page_obj.number }}
-						    	</span>
-						    </a>
-							</li>
-
-							{# 1 next page #}
-
-							 {% if page_obj.has_next and page_obj.number <= page_obj.paginator.num_pages|add:-2 %}
-						    	<li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">
-						    		{{ page_obj.next_page_number }}
-						    	</a></li>
-						    {% endif %}
-
-						    {# ellipsis #}
-
-						 	{% if page_obj.number <= page_obj.paginator.num_pages|add:-3  %}
-						 		<li class="page_item d-flex align-items-end ml-2 mr-2">
-						 			<span class="">. . .</span>
-						 		</li>
-						 	{% endif %}
-
-
-
-							<li class="page-item">
-						 		{% if page_obj.number == page_obj.paginator.num_pages %}
-						 			<span class="sr-only">
-						 				{{ page_obj.paginator.num_pages }}
-						 			</span>
-						 		{% else %}
-						 			<a class="page-link" href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">
-						 			{{ page_obj.paginator.num_pages }}
-						 			</a>
-						 		{% endif %}
-
-						 	</li>
-						   
-						    {% if page_obj.has_next %}
-						    	<li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a></li>
-						    {% endif %}
-						    
-						  </ul>
-						 </nav>
-					{% endif %}
-					
-				{% endblock pagination %}
-
+				
 
 				{% block form %}
 					

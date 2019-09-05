@@ -67,17 +67,17 @@ class ReaderModelTest(TestCase):
 		pass
 
 	def test_reader_get_other_books(self):
-		self.assertEquals(ReaderModelTest.reader.get_other_books(), 
+		self.assertEquals(ReaderModelTest.reader.get_other_books(10), 
 			ReaderModelTest.other_books)	
 
 	def test_reader_get_absolute_url(self):
 		for reader in Reader.objects.all():
 			self.assertEquals(reader.get_absolute_url(), 
-				f'/catalog/reader/{reader.id}/')
+				f'/catalog/reader/{reader.id}/books/')
 
-	def test_reader_get_books(self):
-		self.assertEquals(ReaderModelTest.reader.get_books(),
-			'title 1; title 3; title 5; title 7; title 9')
+	# def test_reader_get_books(self):
+	# 	self.assertEquals(ReaderModelTest.reader.get_books(),
+	# 		'title 1; title 3; title 5; title 7; title 9')
 
 class BookModelTest(TestCase):
 	@classmethod

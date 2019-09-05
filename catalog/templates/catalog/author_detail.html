@@ -20,7 +20,12 @@
 		<img class="bg-light float-left mr-2 mb-3" src="{{ author.get_image_large.url }}">
 		{{ author.biography }}
 	</p>
-
+	
+	{% if author.get_average_grade %}
+		<div class="alert alert-info mb-3">
+			Рейтинг книг автора: <span class="font-weight-bold"> {{author.get_average_grade }} </span>
+		</div>
+	{% endif %}
 
 	<h4 class="mb-3">Все книги автора</h4>
 	{% include "catalog/item_list.html" with items=author.book_set.all %}

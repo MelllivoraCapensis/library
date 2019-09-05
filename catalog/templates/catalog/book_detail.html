@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load thumbnail %}
+{% load custom_filters %}
 
 {% block content %}
 	<h1>
@@ -21,9 +22,16 @@
 
 	<div id="grade_container">
 
-		<p id="average_grade_text">
+		<p class="mb-5" id="average_grade_text">
 			{% if book.get_average_grade %}
-					Средняя оценка пользователей: {{ book.get_average_grade }}
+					<span class="alert alert-info">
+						Средняя оценка пользователей: 
+						<span class="font-weight-bold mr-5">{{ book.get_average_grade }}
+						</span>
+						Оценок: <span class="font-weight-bold">{{ book.get_grades_count }}
+						</span>
+					</span>
+					
 			{% else %}
 					Оценок еще нет ...
 			{% endif %}
@@ -31,17 +39,17 @@
 
 		<div class="d-flex" id="grade_forms">
 			{% if user.reader %}
-					<div id="grade_slider"></div>
+					{% include "catalog/grade_slider.html" with grade=grade.value %}
 					<form class="{% if grade %}d-none{% endif %}" id="create_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}">
 						<input class="d-none" min="0" max="10" name="value" type="number">
-						<button>Оценить</button>
+						<button class="btn btn-info">Оценить</button>
 					</form>
 					<form class="{% if not grade %}d-none{% endif %}" id="update_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}">
 						<input class="d-none" min="0" max="10" name="value" type="number">
-						<button>Изменить оценку</button>
+						<button class="btn-dark btn mr-2">Изменить оценку</button>
 					</form>
 					<form class="{% if not grade %}d-none{% endif %}" id="delete_grade_form" action="{% url 'api_grade' reader_id=user.reader.id book_id=book.id %}" method="delete">
-						<button>
+						<button class="btn-danger btn">
 							Удалить оценку
 						</button>
 					</form>
@@ -50,7 +58,7 @@
 
 		<p id="current_grade_text">
 			{% if grade %}
-					Текущая оценка - {{ grade.value }}</span>
+					Ваша оценка - {{ grade.value }}</span>
 			{% endif %}	
 		</p>
 
@@ -70,11 +78,11 @@
 		{% endif %}
 	</p>
 	{% if user.reader %}
-		{% if book_in_reader_list %}
-			<a class="d-block btn-info p-2 w-100 text-center not-underline mb-5" href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Удалить из моего списка
+		{% if book in user.reader.books.all %}
+			<a class="d-block btn-danger p-2 w-100 text-center not-underline mb-5" href="{% url 'book_delete_from_reader_list' reader_id=user.reader.id book_id=book.id %}">Удалить из моего списка
 			</a>
 		{% else %}
-			<a class="d-block btn-danger p-2 w-100 not-underline text-center mb-5" href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
+			<a class="d-block btn-info p-2 w-100 not-underline text-center mb-5" href="{% url 'book_add_to_reader_list' reader_id=user.reader.id book_id=book.id %}">
 			Добавить в мой список
 			</a>
 		{% endif %}

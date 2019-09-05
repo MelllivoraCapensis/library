@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from ..utils import get_unique_name
 from django.contrib.auth.models import User, Group
 from re import findall
+from ..views import BookList, AuthorList
 
 class AnonimusViewTest(TestCase):
 	fixtures = ['all_data.json']
@@ -19,9 +20,9 @@ class AnonimusViewTest(TestCase):
 		client = Client()
 		response = client.get('/catalog/readers/')
 		derived_readers = list(
-			response.context['readers'].order_by('id'))
+			response.context['readers'])
 		expected_readers = list(
-			Reader.objects.order_by('id'))
+			Reader.objects.all())[:5]
 
 		self.assertListEqual(derived_readers, expected_readers,)
 
@@ -51,9 +52,9 @@ class AnonimusViewTest(TestCase):
 		client = Client()
 		response = client.get('/catalog/authors/')
 		derived_authors = list(
-			response.context['author_list'].order_by('id'))
+			response.context['author_list'])
 		expected_authors = list(
-			Author.objects.order_by('id'))
+			Author.objects.all())[:AuthorList.paginate_by]
 		self.assertListEqual(derived_authors, expected_authors)
 
 	def test_anon_don_t_get_author_create_form(self):
@@ -92,9 +93,9 @@ class AnonimusViewTest(TestCase):
 		client = Client()
 		response = client.get('/catalog/books/')
 		derived_books = list(
-			response.context['book_list'].order_by('id'))
+			response.context['book_list'])
 		expected_books = list(
-			Book.objects.order_by('id'))
+			Book.objects.all())[:BookList.paginate_by]
 		self.assertListEqual(derived_books, expected_books)
 
 	def test_anon_don_t_get_book_create_form(self):

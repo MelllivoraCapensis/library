@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="d-flex">
+		<div class="mr-2">
+			<h2 class="text-center font-weight-normal">Топ-5 книг</h2>
+			{% include "catalog/item_list.html" with items=top_books %}
+		</div>
+		<div>
+			<h2 class="text-center font-weight-normal">Топ-5 авторов</h2>
+			{% include "catalog/item_list.html" with items=top_authors %}
+		</div>
+	</div>
+	
+{% endblock content %}
+s

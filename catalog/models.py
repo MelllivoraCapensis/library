@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from library import settings
 import os
@@ -35,14 +35,38 @@ class Author(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
+		return get_thumbnail(os.path.join(os.getcwd(), 
+			'media/author_default.png'),
 		 'x' + str(self.IMAGE_HEIGHT_SMALL))
 
 	def get_image_large(self):
 		if self.image:
 			return get_thumbnail(self.image, str(self.IMAGE_WIDTH_LARGE))
-		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}author_default.png''',
+		return get_thumbnail(os.path.join(os.getcwd(), 
+			'media/author_default.png'),
 				str(self.IMAGE_WIDTH_LARGE))
+
+
+	def get_average_grade(self):
+		books_with_grade = [b for b in self.book_set.all() if b.get_average_grade()]
+		if not books_with_grade:
+			return False
+		s = 0
+		n = 0
+		for book in books_with_grade:
+			grades = list([g.value for g in book.grade_set.all()])
+			s += sum(grades)
+			n += len(grades)
+		return s / n
+
+	def get_grades_count(self):
+		books_with_grade = [b for b in self.book_set.all() if b.get_average_grade()]
+		if not books_with_grade:
+			return False
+		n = 0
+		for book in books_with_grade:
+			n += book.grade_set.count()
+		return n
 
 
 
@@ -76,17 +100,16 @@ class Book(models.Model):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''https://{Site.objects.get_current()}
-			{settings.MEDIA_URL}book_default.png''',
+		return get_thumbnail(os.path.join(os.getcwd(), 
+			'media/book_default.png'),
 			 'x' + str(self.IMAGE_HEIGHT_SMALL))
 
 	def get_image_large(self):
 		if self.image:
 			return get_thumbnail(self.image, 
 				str(self.IMAGE_WIDTH_LARGE))
-		return get_thumbnail(f'''https://{Site.objects.get_current()}
-			{settings.MEDIA_URL}book_default.png''', 
-			str(self.IMAGE_WIDTH_LARGE))
+		return get_thumbnail(os.path.join(os.getcwd(), 
+			'media/book_default.png'), str(self.IMAGE_WIDTH_LARGE))
 
 	def get_average_grade(self):
 		grades = [g.value for g in self.grade_set.all()]
@@ -94,8 +117,14 @@ class Book(models.Model):
 			return False
 		return round(sum(grades) / len(grades), 2)
 
+	def get_grades_count(self):
+		if self.get_average_grade():
+			return len(self.grade_set.all())
+
 	def __str__(self):
 		return f'{ self.title } ({self.author}, {self.year})'
+
+
 
 class Reader(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -112,21 +141,28 @@ class Reader(models.Model):
 	def __str__(self):
 		return f"{ self.user.username }"
 
-	def get_absolute_url(self):
-		return reverse('reader_detail', args = [str(self.id)])
+	def get_book_list_url(self):
+		return reverse_lazy('reader_book_list', args = [str(self.id)])
 
-	def get_other_books(self):
+	def get_grade_list_url(self):
+		return reverse_lazy('reader_grade_list', args = [str(self.id)])
+
+	def get_absolute_url(self):
+		return self.get_book_list_url()
+
+	def get_other_books(self, num_books):
 		reader_books = self.books.all()
 		reader_book_ids = list([book.id for book in reader_books])
-		other_books = Book.objects.all().exclude(id__in = reader_book_ids)
-		return list(other_books)
+		other_books = list(Book.objects.exclude(id__in = reader_book_ids))
+		other_books.sort(key = lambda obj: - obj.get_average_grade())
+		return other_books[:num_books]
 
 	def get_image_small(self):
 		if self.image:
 			return get_thumbnail(self.image, 'x' + str(
 				self.IMAGE_HEIGHT_SMALL))
-		return get_thumbnail(f'''https://{Site.objects.get_current()}{settings.MEDIA_URL}user_default.png''',
-			'x' + str(self.IMAGE_HEIGHT_SMALL))
+		return get_thumbnail(os.path.join(os.getcwd(),
+		 'media/user_default.png'), 'x' + str(self.IMAGE_HEIGHT_SMALL))
 
 class Grade(models.Model):
 	reader = models.ForeignKey(Reader, on_delete = models.CASCADE)
@@ -134,5 +170,7 @@ class Grade(models.Model):
 	value = models.IntegerField(null = True, blank = True, 
 		verbose_name = 'Оценить книгу', help_text = 'Оцените книгу от 1 до 10', 
 		validators = [MaxValueValidator(10), MinValueValidator(1)])
+
+	
 
 

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2 class="mb-5">Оценки <span class="text-info"> {{ reader }} </span></h2>
+	{% if reader.books.count == 0 %}
+		<p>Пока нет ни одной книги ...</p>
+	{% endif %}
+	
+	{% include "catalog/item_list.html" with items=page_obj %}
+	
+
+{% endblock content %}
