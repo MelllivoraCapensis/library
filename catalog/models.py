@@ -75,15 +75,21 @@ class Author(models.Model):
 		return f'{self.first_name} {self.last_name}'
 
 class Book(models.Model):
-	title = models.CharField(max_length = 100, verbose_name = 'Название', help_text = 'Введите название книги')
-	year = models.IntegerField(verbose_name = 'Год написания', help_text = 'Введите год написания книги')
+	title = models.CharField(max_length = 100, 
+		verbose_name = 'Название', help_text = 'Введите название книги')
+	year = models.IntegerField(verbose_name = 'Год написания', 
+		help_text = 'Введите год написания книги')
 	author = models.ForeignKey(Author, on_delete = models.SET_NULL, 
-		null = True, blank = True, verbose_name = 'Автор', help_text = 'Выберите автора из списка')
-	description = models.TextField(verbose_name = 'Краткое описание', help_text = 'Введите краткое описание книги')
-	file = models.FileField(null = True, blank = True, 
-		default = None, verbose_name = 'Файл', help_text = 'Добавьте файл')
-	image = models.ImageField(upload_to = 'books', null = True, blank = True,
-		default = None, verbose_name = 'Изображение книги', help_text = 'Добавьте изображение книги')
+		null = True, blank = True, verbose_name = 'Автор', 
+		help_text = 'Выберите автора из списка')
+	description = models.TextField(verbose_name = 'Краткое описание', 
+		help_text = 'Введите краткое описание книги')
+	file = models.FileField(upload_to = 'books', null = True,
+		blank = True, default = None, verbose_name = 'Файл', 
+		help_text = 'Добавьте файл')
+	image = models.ImageField(upload_to = 'books', 
+		null = True, blank = True, default = None, 
+		verbose_name = 'Изображение книги', help_text = 'Добавьте изображение книги')
 	
 
 	IMAGE_WIDTH_LARGE = 300

@@ -23,12 +23,27 @@ class AuthorForm(ModelForm):
 			return self.cleaned_data['date_of_birth']
 
 class BookForm(ModelForm):
+	VALID_EXTENSIONS = ('pdf', 'doc', 'djvu', 'docx', 'rtf', 'txt')
 	class Meta:
 		model = Book
 		fields = '__all__'
 
 	def clean_year(self):
-		print(date.today().year, self.cleaned_data['year'])
 		if date.today().year < self.cleaned_data['year']:
 			raise ValidationError('Дата выпуска книги не может быть позже текущего года')
 		return self.cleaned_data['year']
+
+	def clean_file(self):
+		file_name = self.cleaned_data['file'].name
+		point_index = int(file_name.rfind('.'))
+
+		if point_index == -1:
+			raise ValidationError('Недопустимое имя файла')
+			
+		file_ext = file_name[point_index + 1:]
+
+		if file_ext not in self.VALID_EXTENSIONS:
+			raise ValidationError('Недопустимое расширение файла')
+
+		return self.cleaned_data['file']
+
