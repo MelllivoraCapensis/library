@@ -57,7 +57,7 @@ class Author(models.Model):
 			grades = list([g.value for g in book.grade_set.all()])
 			s += sum(grades)
 			n += len(grades)
-		return s / n
+		return round(s / n, 2)
 
 	def get_grades_count(self):
 		books_with_grade = [b for b in self.book_set.all() if b.get_average_grade()]
