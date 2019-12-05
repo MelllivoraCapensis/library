@@ -1,5 +1,5 @@
 dj-database-url==0.5.0
-Django==2.2.4
+Django==2.2.8
 django-clear-cache==0.3
 django-cors-headers==3.1.0
 djangorestframework==3.10.2
